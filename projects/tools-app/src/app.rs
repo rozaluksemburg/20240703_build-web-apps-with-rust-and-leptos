@@ -2,6 +2,66 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 
+#[component] // объясни этот компонент в контексте остальных 
+pub fn Container(children: Children) -> impl IntoView {
+    view! { <div class="container">{children()} </div> }
+} 
+
+#[component] // создаем заголовок страницы и помещаем его в контейнер 
+// <Container><PageHeader/></Container> - который ниже - как компонент в компонент
+pub fn PageHeader() -> impl IntoView {
+    view! { 
+        <header id="page-header"> 
+            <h1>"Leptos Universe Tools LLC"</h1>
+        </header>
+    }
+} 
+// то есть получается компоненты - это блоки html, которые заворачиваются друг в друга, как матрешки
+
+// создаем компонент PageFooter, выполняющий функцию тэга <footer>в html</footer>
+#[component]
+pub fn PageFooter() -> impl IntoView {
+    view! {
+        <footer id="page-footer">
+            <p>"© 2024 Leptos Universe Tools LLC"</p>
+        </footer>
+    }
+}
+
+// это навигационная панель на боковой панели
+#[component]
+pub fn NavBar() -> impl IntoView {
+    view! {
+        <nav id="main-menu">
+            <ul>
+                <li class="menu-item">
+                    <a href="/">"Home"</a>
+                </li>
+            </ul>
+        </nav>
+    }
+}
+
+#[component]
+pub fn SideBar() -> impl IntoView {
+    view! { <aside id="sidebar">Sidebar</aside> }
+}
+
+// а в этот компонент Content мы помещаем все компоненты, которые будут отображаться на странице 
+#[component]
+pub fn Content() -> impl IntoView { 
+    view! {        
+        <Router>
+            <main id="content">
+                <Routes>
+                    <Route path="" view=HomePage/>
+                    <Route path="/*any" view=NotFound/>
+                </Routes>
+            </main>
+        </Router>
+    }
+}
+
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
@@ -13,17 +73,16 @@ pub fn App() -> impl IntoView {
         <Stylesheet id="leptos" href="/pkg/tools-app.css"/>
 
         // sets the document title
-        <Title text="Welcome to Leptos"/>
+        <Title text="Leptos - Я люблю Тебя!"/>
 
-        // content for this welcome page
-        <Router>
-            <main>
-                <Routes>
-                    <Route path="" view=HomePage/>
-                    <Route path="/*any" view=NotFound/>
-                </Routes>
-            </main>
-        </Router>
+        <Container>
+            <PageHeader/> // вот сюда мы поместили созданный выше компонент PageHeader
+            <NavBar/> // боковая панель с меню            
+            // content for this welcome page
+            <Content/> // отображение всех видимых пользователю компонентов страницы 
+            <SideBar/> // тут мы поместили созданный выше компонент SideBar
+            <PageFooter/> // вот тут мы поместили footer в виде заранее созданного компонента PageFooter       
+        </Container>
     }
 }
 
