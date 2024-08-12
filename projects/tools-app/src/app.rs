@@ -2,10 +2,10 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 
+use crate::components::parent_child::parent_child_home::ParentChildHome;
+
 // таким образом мы дали доступ манипулировать компонентом ParentChildHome в app.rs
-use crate::components::parent_child::{
-    parent_child_home::ParentChildHome, parent_child_write_signal::Parent as ParentWriteSignal,
-};
+use crate::components::parent_child::parent_child_write_signal::Parent;
 
 
 
@@ -43,7 +43,7 @@ pub fn NavBar() -> impl IntoView {
         <nav id="main-menu">
             <ul>
                 <li class="menu-item">
-                <a href="/">"Home"</a>
+                <a href="/">"Home"</a> // так делаем пункт меню 
                 </li>             
                 <li class="menu-item">
                     <a href="/parent-child">"Parent Child"</a>
@@ -66,10 +66,15 @@ pub fn Content() -> impl IntoView {
             <main id="content">
                 <Routes>
                     <Route path="/" view=HomePage/>
-                    <Route path="/parent-child" view=ParentChildHome> // иерархия вложеннных файл и папок друг в друга
-                        <Route path="write-signal" view=ParentWriteSignal />
-                        <Route path="" view=|| view! { <p>"Click"</p> } />
-                    </Route>
+                    <Route path="/parent-child" view=ParentChildHome> // прописываем путь к компоненту ParentChildHome
+                        <Route path="write-signal" view=Parent /> // и отображаем доступный по пути компонент, который мы отобржаем через view=Component
+                        <Route path="" view=|| view! { <p>"Click"</p> } /> // это прикольно вообще - короче ниже пишу 
+                        // прописываем путь path="" он пуст, и это неспроста - мы же находимся в компоненте ParentChildHome
+                    // и пользователю виден текст в обычном html теге <p>Click</p> вследствие того, что мы тут вообще указали <Route>
+                    // и через view - то есть отображение - мы как заминировали слово Click замыканием, которое срабатывает при клике по слову Click
+                    // а при клике на Click отображается компонент Parent с надписью 
+                    </Route> 
+                    // 
                     <Route path="/*any" view=NotFound/>
                 </Routes>
             </main>

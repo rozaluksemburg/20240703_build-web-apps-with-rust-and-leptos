@@ -1,3 +1,4 @@
+// lib.rs в корне проекта это как mod.rs в других вложенных папках в главную 
 pub mod app;
 pub mod components;
 
